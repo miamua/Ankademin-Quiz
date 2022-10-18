@@ -44,20 +44,17 @@ let questionsArr = [
 
 
 let questionNumber = 0;
+let points = 0;
+let maxPoints = 10;
 let getResultBtn = document.querySelector("#submitAnswers");
 let questionDiv = document.querySelector("#questions-div")
 let questionLi = document.createElement("div");
 questionLi.innerText = questionsArr[questionNumber].question;
 questionDiv.append(questionLi);
 
-let points = 0;
+
 getResultBtn.addEventListener("click", () => {
     let userAnswer = document.querySelector("[name='userAnswer']:checked").value;
-    //console.log(userAnswer);
-    //console.log(questionNumber);
-    //console.log(questionsArr[questionNumber].answers)
-
-
     if (userAnswer == questionsArr[questionNumber].answers) {
         points++;
 
@@ -68,8 +65,7 @@ getResultBtn.addEventListener("click", () => {
         questionLi.innerText = questionsArr[questionNumber].question; //get next question
         questionDiv.append(questionLi)
     } else if (questionNumber === questionsArr.length - 1) {
-        console.log("Finish! Your score is " + points);
-        //questionDiv.style.display = "none";
+        console.log("Finished! Your score is " + points);
         document.querySelector("#container").style.display = "none";
         let resultBtn = document.createElement("button");
         resultBtn.innerText = "Show score";
@@ -78,13 +74,28 @@ getResultBtn.addEventListener("click", () => {
 
         resultBtn.addEventListener("click", () => {
             result = document.createElement("h2");
-            result.innerText = "Finish! Your score is " + points;
+            result.innerText = "Finished! Your score is " + points;
             document.querySelector("#website-info").append(result);
             resultBtn.style.display = "none";
+            gradeText = document.createElement("h3");
+
+
+
+            if (points >= maxPoints * 0.75) {
+                gradeText.innerText = "Mycket väl godkänd Dude!";
+                gradeText.style.color = "green";
+
+            } else if (points >= maxPoints * 0.5 && points < maxPoints * 0.75) {
+                gradeText.innerText = "Godkänd!";
+                gradeText.style.color = "orange";
+            } else {
+                gradeText.innerText = "Underkänd!";
+                gradeText.style.color = "red";
+            }
+            document.querySelector("#website-info").append(gradeText);
         })
 
     }
-
 
     //remove a check from radio button
     let uncheck = document.querySelector("[name='userAnswer']:checked");
@@ -92,5 +103,27 @@ getResultBtn.addEventListener("click", () => {
 
 })
 
-//});
+let darkModeBtn = document.querySelector("#darkMode");
+let darkMode = document.querySelector("body");
+let lightMode = document.querySelector("body");
+let lightModeBtn = document.createElement("button");
 
+
+
+darkModeBtn.addEventListener("click", () => {
+    darkMode.style.backgroundColor = "black";
+    darkMode.style.color = "white";
+    document.querySelector("#switchMode").append(lightModeBtn);
+    lightModeBtn.innerText = "Light mode";
+    lightModeBtn.style.display = "";
+    darkModeBtn.style.display = "none";
+
+})
+
+lightModeBtn.addEventListener("click", () => {
+    lightMode.style.backgroundColor = "white";
+    lightMode.style.color = "black";
+    darkModeBtn.style.display = "";
+    lightModeBtn.style.display = "none";
+
+})
