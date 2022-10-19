@@ -8,21 +8,24 @@
     <title>Quiz game</title>
 </head>
 
+
 <body>
     <div id="website-info">
         <h1>Welcome to Ankademin Quiz 🎮</h1>
     </div>
-    <div id="container">
-        <div id="questions-div"></div>
-        <div id="choices-div">
-            <input type="radio" name="userAnswer" value="true" id="true" />
-            <label for="true">True</label>
-            <input type="radio" name="userAnswer" value="false" id="false" />
-            <label for="false">False</label>
-        </div>
-        <div><button id="submitAnswers">Submit</button></div>
+    <div id="questionbox">
+        <p id="question">
 
+        </p>
+        <div id="questionAnswer">
+
+        </div>
     </div>
+    <div id="resultBox"></div>
+
+    <div id="allResults"></div>
+
+
     <div id="switchMode"></div>
     <div><button id="darkMode">Dark mode</button></div>
     <script src="index.js"></script>
