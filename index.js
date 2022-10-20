@@ -26,7 +26,7 @@ let questionsArr = [
     {
         question: "5. Is the earth flat?",
         answers: ["true", "true", "true", "false"],
-        correct: ["true", "true", "true"],
+        correct: ["false"],
         type: "checkbox"
     },
     {
@@ -71,7 +71,9 @@ let questionAnswer = document.querySelector("#questionAnswer")
 let question = document.querySelector("#question")
 let answerSubmit = document.createElement("button")
 let startQuiz = document.createElement("button")
+startQuiz.setAttribute("id", "startQuiz")
 answerSubmit.textContent = "Submit"
+answerSubmit.setAttribute("id", "submit");
 startQuiz.innerHTML = "Start Quiz"
 let endResults = [];
 questionBox.append(startQuiz)
@@ -118,15 +120,16 @@ answerSubmit.addEventListener("click", () => {
         RightOrWrong = "❌";
     }
 
-    let testToPutAll = { "question": questionsArr[questionNumber].question, "playerAns": answeredQuestions, "Result": RightOrWrong };
-    endResults.push(testToPutAll);
+    //let testToPutAll = { "question": questionsArr[questionNumber].question, "playerAns": answeredQuestions, "Result": RightOrWrong };
+    //endResults.push(testToPutAll);
 
     if (!answered) {
-        alert("Please select an answear")
+        alert("Please select an answear");
     } else if (questionNumber < questionsArr.length - 1) {
+        let testToPutAll = { "question": questionsArr[questionNumber].question, "playerAns": answeredQuestions, "Result": RightOrWrong };
+        endResults.push(testToPutAll);
 
         questionAnswer.innerHTML = ""
-
         questionNumber++
         question.innerText = questionsArr[questionNumber].question;
 
@@ -143,10 +146,13 @@ answerSubmit.addEventListener("click", () => {
             questionAnswer.appendChild(radioLabel)
         }
     } else {
+        let testToPutAll = { "question": questionsArr[questionNumber].question, "playerAns": answeredQuestions, "Result": RightOrWrong };
+        endResults.push(testToPutAll);
         document.querySelector("#questionbox").style.display = "none";
         let resultBtn = document.createElement("button");
         resultBtn.innerText = "Show score";
-        document.querySelector("#resultBox").append(resultBtn);
+        resultBtn.setAttribute("id", "showScore"),
+            document.querySelector("#resultBox").append(resultBtn);
 
 
         resultBtn.addEventListener("click", () => {
@@ -183,6 +189,7 @@ answerSubmit.addEventListener("click", () => {
 function getAllquestion() {
     let scoreTable = document.createElement("table");
     scoreTable.style.width = "100%";
+    scoreTable.setAttribute("id", "scoreTable");
     let scoreRow = document.createElement("tr");
     let allquestions = document.createElement("th");
     let allUserAnswers = document.createElement("th");
@@ -199,9 +206,12 @@ function getAllquestion() {
     endResults.forEach((question) => {
         let questionsRow = document.createElement("tr");
         let questionsItem = document.createElement("td");
+        questionsItem.setAttribute("id", "questionItem");
         let userAnswerItem = document.createElement("td");
         let ResultItem = document.createElement("td");
         questionsItem.innerText = question.question;
+        userAnswerItem.style.textAlign = "center";
+        ResultItem.style.textAlign = "center";
         userAnswerItem.innerText = question.playerAns;
         ResultItem.innerText = question.Result;
         document.querySelector("table").append(questionsRow);
@@ -217,7 +227,7 @@ let darkModeBtn = document.querySelector("#darkMode");
 let darkMode = document.querySelector("body");
 let lightMode = document.querySelector("body");
 let lightModeBtn = document.createElement("button");
-
+lightModeBtn.setAttribute("id", "lightMode");
 
 
 darkModeBtn.addEventListener("click", () => {
