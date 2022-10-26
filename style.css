@@ -28,6 +28,7 @@ h1 {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     background-color: plum;
+
 }
 
 #lightMode {
@@ -42,6 +43,17 @@ h1 {
 }
 
 #submit {
+    margin-top: 30px;
+    border-radius: 10px;
+    height: 50px;
+    width: 150px;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    background-color: plum;
+}
+
+#restartBtn {
     margin-top: 30px;
     border-radius: 10px;
     height: 50px;
@@ -69,8 +81,4 @@ h1 {
     font-weight: bold;
     border-radius: 10px;
     border-color: black;
-}
-
-#questionItem {
-    text-align: left;
 }

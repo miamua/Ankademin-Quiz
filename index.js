@@ -1,3 +1,65 @@
+//-------------- get qustion's choices -------------------
+function getQuestionChoices() {
+    for (i = 0; i < questionsArr[questionNumber].answers.length; i++) {
+        answerInput = document.createElement("input")
+        answerInput.setAttribute("type", questionsArr[questionNumber].type);
+        answerInput.setAttribute("name", "answer");
+        answerInput.setAttribute("value", questionsArr[questionNumber].answers[i]);
+        questionAnswer.append(answerInput)
+        answerLabel = document.createElement("label");
+        answerLabel.innerHTML = (questionsArr[questionNumber].answers[i])
+        questionAnswer.append(answerLabel)
+    }
+}
+
+//-------------- calculate grade function -------------------
+function grade() {
+    if (points >= maxPoints * 0.75) {
+        gradeText.innerText = "Mycket väl godkänd Dude!";
+        gradeText.style.color = "green";
+
+    } else if (points >= maxPoints * 0.5 && points < maxPoints * 0.75) {
+        gradeText.innerText = "Godkänd!";
+        gradeText.style.color = "orange";
+    } else {
+        gradeText.innerText = "Underkänd!";
+        gradeText.style.color = "red";
+    }
+
+}
+
+//-------------- show all questions/user answers/results function -------------------
+function getAllquestion() {
+    let scoreTable = document.createElement("table");
+    scoreTable.style.width = "100%";
+    let scoreRow = document.createElement("tr");
+    let allquestions = document.createElement("th");
+    let allUserAnswers = document.createElement("th");
+    let allResults = document.createElement("th");
+    allquestions.textContent = "Questions";
+    allUserAnswers.innerText = "Your answers";
+    allResults.innerText = "Results";
+    document.querySelector("#allResults").append(scoreTable);
+    scoreTable.append(scoreRow);
+    scoreRow.append(allquestions, allUserAnswers, allResults);
+
+    endResults.forEach((question) => {
+        let questionsRow = document.createElement("tr");
+        let questionsItem = document.createElement("td");
+        let userAnswerItem = document.createElement("td");
+        let ResultItem = document.createElement("td");
+        questionsItem.innerText = question.question;
+        userAnswerItem.innerText = question.playerAns;
+        ResultItem.innerText = question.Result;
+        questionsItem.style.textAlign = "left";
+        userAnswerItem.style.textAlign = "center";
+        ResultItem.style.textAlign = "center";
+        scoreTable.append(questionsRow);
+        questionsRow.append(questionsItem, userAnswerItem, ResultItem);
+    })
+};
+
+
 let questionsArr = [
     {
         question: "1. Fish cannot blink?",
@@ -62,56 +124,59 @@ let questionsArr = [
 
 ];
 
-
+//Declare all variables 
 let questionNumber = 0
 let points = 0;
 let maxPoints = 10;
+let endResults = [];
 let questionBox = document.querySelector("#questionbox")
 let questionAnswer = document.querySelector("#questionAnswer")
 let question = document.querySelector("#question")
 let answerSubmit = document.createElement("button")
+answerSubmit.setAttribute("id", "submit");  //set element id for answerSubmit button
+answerSubmit.innerText = "Submit"
 let startQuiz = document.createElement("button")
 startQuiz.setAttribute("id", "startQuiz")
-answerSubmit.textContent = "Submit"
-answerSubmit.setAttribute("id", "submit");
-startQuiz.innerHTML = "Start Quiz"
-let endResults = [];
-questionBox.append(startQuiz)
+startQuiz.innerText = "Start Quiz";
+document.querySelector("#startBtn").append(startQuiz)
+let restartBtn = document.createElement("button")
+restartBtn.setAttribute("id", "restartBtn")
+restartBtn.innerText = "Try again";
+let resultBtn = document.createElement("button");
+resultBtn.innerText = "Show score";
+resultBtn.setAttribute("id", "showScore");
 
 
+//when startQuiz button is clicked
 startQuiz.addEventListener("click", () => {
     question.innerText = questionsArr[questionNumber].question;
+    //remove startQuiz button and display answerSubmit button
     startQuiz.remove()
     questionBox.append(answerSubmit)
-    for (i = 0; i < questionsArr[questionNumber].answers.length; i++) {
-        let radioButton = document.createElement("input")
-        radioButton.setAttribute("type", questionsArr[questionNumber].type);
-        radioButton.setAttribute("name", "answear");
-        radioButton.setAttribute("value", questionsArr[questionNumber].answers[i]);
-        radioButton.setAttribute("id", "answear" + i);
-        questionAnswer.appendChild(radioButton);
-
-        let radioLabel = document.createElement("label");
-        radioLabel.innerHTML = (questionsArr[questionNumber].answers[i])
-        questionAnswer.appendChild(radioLabel)
-    }
+    getQuestionChoices()
 
 });
 
+//when submit button is clicked
 answerSubmit.addEventListener("click", () => {
     let answered = false;
-    let answeredQuestions = [];
-    let answer = document.getElementsByName("answear");
-    let RightOrWrong = ""
+    let answeredQuestions = []; //arr for chosen answer
+    let answer = document.getElementsByName("answer"); //"answer" crated in getQuestionChoices function
+    let RightOrWrong = "";
+
+    //looping over all answers to check which one is checked
     for (i = 0; i < answer.length; i++) {
         if (answer[i].checked) {
-            answered = true
+            answered = true;
             answeredQuestions.push(answer[i].value)
         }
     }
     console.log(questionsArr[questionNumber].correct)
     console.log(answeredQuestions)
-    if (JSON.stringify(answeredQuestions) == JSON.stringify(questionsArr[questionNumber].correct)) {
+
+    //check if answer is correct
+    //JSON.stringify makes the array into a string
+    if (JSON.stringify(answeredQuestions) === JSON.stringify(questionsArr[questionNumber].correct)) {
         console.log("Rätt")
         RightOrWrong = "✅";
         points++;
@@ -120,109 +185,66 @@ answerSubmit.addEventListener("click", () => {
         RightOrWrong = "❌";
     }
 
+    //no choices is picked
     if (!answered) {
-        alert("Please select an answear");
+        alert("Please select an answer");
+        //question number < 10 so continue display questions
     } else if (questionNumber < questionsArr.length - 1) {
-        let testToPutAll = { "question": questionsArr[questionNumber].question, "playerAns": answeredQuestions, "Result": RightOrWrong };
-        endResults.push(testToPutAll);
-
-        questionAnswer.innerHTML = ""
+        let putAllData = { "question": questionsArr[questionNumber].question, "playerAns": answeredQuestions, "Result": RightOrWrong };
+        endResults.push(putAllData);
+        questionAnswer.innerHTML = "";
         questionNumber++
         question.innerText = questionsArr[questionNumber].question;
+        getQuestionChoices()
 
-        for (i = 0; i < questionsArr[questionNumber].answers.length; i++) {
-            radioButton = document.createElement("input")
-            radioButton.setAttribute("type", questionsArr[questionNumber].type);
-            radioButton.setAttribute("name", "answear");
-            radioButton.setAttribute("value", questionsArr[questionNumber].answers[i]);
-            radioButton.setAttribute("id", "answear" + i);
-            questionAnswer.appendChild(radioButton)
-
-            radioLabel = document.createElement("label");
-            radioLabel.innerHTML = (questionsArr[questionNumber].answers[i])
-            questionAnswer.appendChild(radioLabel)
-        }
+        //out of questions
     } else {
-        let testToPutAll = { "question": questionsArr[questionNumber].question, "playerAns": answeredQuestions, "Result": RightOrWrong };
-        endResults.push(testToPutAll);
+        let putAllData = { "question": questionsArr[questionNumber].question, "playerAns": answeredQuestions, "Result": RightOrWrong };
+        endResults.push(putAllData);
         document.querySelector("#questionbox").style.display = "none";
-        let resultBtn = document.createElement("button");
-        resultBtn.innerText = "Show score";
-        resultBtn.setAttribute("id", "showScore"),
-            document.querySelector("#resultBox").append(resultBtn);
-
-
-        resultBtn.addEventListener("click", () => {
-            console.log("Finished! Your score is " + points);
-            result = document.createElement("h2");
-            result.innerText = "Finished! Your score is " + points;
-            document.querySelector("#resultBox").append(result);
-            resultBtn.style.display = "none";
-            gradeText = document.createElement("h3");
-
-            grade(); //call grade function
-            document.querySelector("#resultBox").append(gradeText);
-            getAllquestion()
-            console.log(endResults)
-        })
+        document.querySelector("#resultBox").append(resultBtn);
 
     }
 
-
 })
 
-function getAllquestion() {
-    let scoreTable = document.createElement("table");
-    scoreTable.style.width = "100%";
-    scoreTable.setAttribute("id", "scoreTable");
-    let scoreRow = document.createElement("tr");
-    let allquestions = document.createElement("th");
-    let allUserAnswers = document.createElement("th");
-    let allCorrectAnswers = document.createElement("th");
-    document.querySelector("#allResults").append(scoreTable);
-    scoreTable.append(scoreRow);
-    allquestions.textContent = "Questions";
-    allCorrectAnswers.innerText = "Results";
-    allUserAnswers.innerText = "Your answers";
-    scoreRow.append(allquestions, allUserAnswers, allCorrectAnswers);
-
-
-
-    endResults.forEach((question) => {
-        let questionsRow = document.createElement("tr");
-        let questionsItem = document.createElement("td");
-        questionsItem.setAttribute("id", "questionItem");
-        let userAnswerItem = document.createElement("td");
-        let ResultItem = document.createElement("td");
-        questionsItem.innerText = question.question;
-        userAnswerItem.style.textAlign = "center";
-        ResultItem.style.textAlign = "center";
-        userAnswerItem.innerText = question.playerAns;
-        ResultItem.innerText = question.Result;
-        document.querySelector("table").append(questionsRow);
-
-        questionsRow.append(questionsItem);
-        questionsRow.append(userAnswerItem);
-        questionsRow.append(ResultItem);
-    })
-};
+resultBtn.addEventListener("click", () => {
+    console.log("Finished! Your score is " + points);
+    result = document.createElement("h2");
+    result.innerText = "Finished! Your score is " + points;
+    document.querySelector("#resultBox").append(result);
+    resultBtn.style.display = "none";
+    document.querySelector("#startBtn").append(restartBtn);
+    gradeText = document.createElement("h2");
+    document.querySelector("#resultBox").append(gradeText);
+    grade();
+    getAllquestion()
+    console.log(endResults)
+})
 
 
 //-------------- Dark mode part -------------------
-let darkModeBtn = document.querySelector("#darkMode");
+// Dark mode button
+let darkModeBtn = document.createElement("button");
 let darkMode = document.querySelector("body");
-let lightMode = document.querySelector("body");
+darkModeBtn.setAttribute("id", "darkMode");
+darkModeBtn.innerText = "Dark mode";
+document.querySelector("#switchMode").append(darkModeBtn);
+
+//Light mode button
 let lightModeBtn = document.createElement("button");
+let lightMode = document.querySelector("body");
 lightModeBtn.setAttribute("id", "lightMode");
+lightModeBtn.innerText = "Light mode";
 
 
 darkModeBtn.addEventListener("click", () => {
     darkMode.style.backgroundColor = "black";
     darkMode.style.color = "white";
     document.querySelector("#switchMode").append(lightModeBtn);
-    lightModeBtn.innerText = "Light mode";
-    lightModeBtn.style.display = "";
-    darkModeBtn.style.display = "none";
+    darkModeBtn.style.display = "none"; //hide darkModeBtn
+    lightModeBtn.style.display = ""; //display lightModeBtn
+
 });
 
 
@@ -234,18 +256,6 @@ lightModeBtn.addEventListener("click", () => {
 });
 
 
-
-function grade() {
-    if (points >= maxPoints * 0.75) {
-        gradeText.innerText = "Mycket väl godkänd Dude!";
-        gradeText.style.color = "green";
-
-    } else if (points >= maxPoints * 0.5 && points < maxPoints * 0.75) {
-        gradeText.innerText = "Godkänd!";
-        gradeText.style.color = "orange";
-    } else {
-        gradeText.innerText = "Underkänd!";
-        gradeText.style.color = "red";
-    }
-
-}
+restartBtn.addEventListener("click", () => {
+    window.location.reload();
+})
