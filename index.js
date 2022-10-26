@@ -1,56 +1,56 @@
 let questionsArr = [
     {
-        question: "1. Is Vim the best editor?",
+        question: "1. Fish cannot blink?",
         answers: ["true", "false"],
         correct: ["true"],
         type: "radio"
     },
     {
-        question: "2. Is Nano the best editor?",
-        answers: ["Yes", "No", "Never", "Sometimes"],
-        correct: ["Yes", "Sometimes"],
-        type: "checkbox"
-    },
-    {
-        question: "3. Is Brandon the best teacher?",
-        answers: ["true", "false", "maybe", "never"],
-        correct: ["true"],
-        type: "radio"
-    },
-    {
-        question: "4. Is Nackademin the best school on earth?",
-        answers: ["true", "true", "true", "false"],
-        correct: ["true", "true", "true"],
-        type: "checkbox"
-    },
-    {
-        question: "5. Is the earth flat?",
-        answers: ["true", "true", "true", "false"],
-        correct: ["false"],
-        type: "checkbox"
-    },
-    {
-        question: "6. 10x10 = 1000?",
+        question: "2. Is the earth flat?",
         answers: ["true", "false"],
         correct: ["false"],
         type: "radio"
     },
     {
-        question: "7. 5x5 = 25?",
-        answers: ["true", "false"],
-        correct: ["true"],
+        question: "3. What colour is the “m” from the McDonald’s logo?",
+        answers: ["Blue", "Red", "Yellow", "Black"],
+        correct: ["Yellow"],
         type: "radio"
     },
     {
-        question: "8. Fish cannot blink?",
-        answers: ["true", "false"],
-        correct: ["true"],
+        question: "4. Which of these EU countries does not use the euro as its currency?",
+        answers: ["Poland", "Denmark", "Sweden", "All of the above"],
+        correct: ["All of the above"],
         type: "radio"
     },
     {
-        question: "9. An octopus has three hearts?",
+        question: "5. Which animals has 4 legs?",
+        answers: ["Bear", "Bird", "Buffalo", "Fox"],
+        correct: ["Bear", "Buffalo", "Fox"],
+        type: "checkbox"
+    },
+    {
+        question: "6. Which country is in Asia?",
+        answers: ["Japan", "Thailand", "Sweden", "England"],
+        correct: ["Japan", "Thailand"],
+        type: "checkbox"
+    },
+    {
+        question: "7. What does the term “SOS” commonly stand for?",
+        answers: ["Save Our Sheep", "Save Our Ship", "Save Our Seal", "Save Our Souls"],
+        correct: ["Save Our Souls"],
+        type: "radio"
+    },
+    {
+        question: "8. Which company is known for publishing the Mario video game?",
+        answers: ["Xbox", "Nintendo", "SEGA", "Electronic Arts"],
+        correct: ["Nintendo"],
+        type: "radio"
+    },
+    {
+        question: "9. Mars is the closest planet to the Sun?",
         answers: ["true", "false"],
-        correct: ["true"],
+        correct: ["false"],
         type: "radio"
     },
     {
@@ -120,9 +120,6 @@ answerSubmit.addEventListener("click", () => {
         RightOrWrong = "❌";
     }
 
-    //let testToPutAll = { "question": questionsArr[questionNumber].question, "playerAns": answeredQuestions, "Result": RightOrWrong };
-    //endResults.push(testToPutAll);
-
     if (!answered) {
         alert("Please select an answear");
     } else if (questionNumber < questionsArr.length - 1) {
@@ -163,19 +160,7 @@ answerSubmit.addEventListener("click", () => {
             resultBtn.style.display = "none";
             gradeText = document.createElement("h3");
 
-
-
-            if (points >= maxPoints * 0.75) {
-                gradeText.innerText = "Mycket väl godkänd Dude!";
-                gradeText.style.color = "green";
-
-            } else if (points >= maxPoints * 0.5 && points < maxPoints * 0.75) {
-                gradeText.innerText = "Godkänd!";
-                gradeText.style.color = "orange";
-            } else {
-                gradeText.innerText = "Underkänd!";
-                gradeText.style.color = "red";
-            }
+            grade(); //call grade function
             document.querySelector("#resultBox").append(gradeText);
             getAllquestion()
             console.log(endResults)
@@ -223,6 +208,7 @@ function getAllquestion() {
 };
 
 
+//-------------- Dark mode part -------------------
 let darkModeBtn = document.querySelector("#darkMode");
 let darkMode = document.querySelector("body");
 let lightMode = document.querySelector("body");
@@ -237,16 +223,29 @@ darkModeBtn.addEventListener("click", () => {
     lightModeBtn.innerText = "Light mode";
     lightModeBtn.style.display = "";
     darkModeBtn.style.display = "none";
-
-
-
 });
+
 
 lightModeBtn.addEventListener("click", () => {
     lightMode.style.backgroundColor = "white";
     lightMode.style.color = "black";
     darkModeBtn.style.display = "";
     lightModeBtn.style.display = "none";
-
-
 });
+
+
+
+function grade() {
+    if (points >= maxPoints * 0.75) {
+        gradeText.innerText = "Mycket väl godkänd Dude!";
+        gradeText.style.color = "green";
+
+    } else if (points >= maxPoints * 0.5 && points < maxPoints * 0.75) {
+        gradeText.innerText = "Godkänd!";
+        gradeText.style.color = "orange";
+    } else {
+        gradeText.innerText = "Underkänd!";
+        gradeText.style.color = "red";
+    }
+
+}
