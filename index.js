@@ -37,6 +37,7 @@ function getAllquestion() {
     let allUserAnswers = document.createElement("th");
     let allResults = document.createElement("th");
     allquestions.textContent = "Questions";
+    allquestions.style.textAlign = "left";
     allUserAnswers.innerText = "Your answers";
     allResults.innerText = "Results";
     document.querySelector("#allResults").append(scoreTable);
